@@ -1,5 +1,7 @@
 # Joint Pre-Equalization and Receiver Combining Design for Federated Learning with Misaligned Over-the-Air Computation
 
+This repository is the official implementation of paper Joint Pre-Equalization and Receiver Combining Design for Federated Learning with Misaligned Over-the-Air Computation
+
 ## Documentations
 
 * __main.py__: Initialize the simulation system, optimizing the variables, training the learning model
