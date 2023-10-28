@@ -37,6 +37,13 @@ def Main(args, method):
     f_norm2 = np.linalg.norm(f, 2) ** 2
     args.f_norm2 = f_norm2
 
+    dict_users, dataset_train, dataset_test = Load_Data(args)
+    args.testDataset = dataset_test
+    K = np.zeros(args.M_Prime)
+    for i, item in enumerate(dict_users.keys()):
+        K[i] = len(dict_users[item])
+    args.K = K
+
     V = np.zeros((L, M * L))
     v = np.ones((1, M))
     for i in range(L):
@@ -48,14 +55,7 @@ def Main(args, method):
     Q = V.T.conj() @ V
 
     result = {}
-    dict_users, dataset_train, dataset_test = Load_Data(args)  # 调试一下
 
-    K = np.zeros(args.M_Prime)
-    for i, item in enumerate(dict_users.keys()):
-        K[i] = len(dict_users[item])
-    args.K = K
-
-    # build model
     if args.model == 'cnn' and args.dataset == 'cifar':
         net_glob = CNNCifar2(args=args).to(args.device)
     elif args.model == 'cnn' and (args.dataset == 'mnist' or args.dataset == 'Fmnist'):
@@ -72,7 +72,9 @@ def Main(args, method):
     print(f'Total Number of Parameters={d}')
     print(f'The Dataset = {args.dataset}')
     print(f'The Learning Rate = {args.lr}')
+    print(f'The local E = {args.local_ep}')
     print(f'The Epoch = {args.epochs}')
+    print(f'The iid = {args.iid}')
 
     net_glob.train()
     print("============================== Federated Learning ... ...")
@@ -126,19 +128,12 @@ def Main(args, method):
         net_glob.train()
     result['train_loss'] = np.asarray(loss_train)
     result['test_acc'] = np.asarray(acc_store)
-
-    return result
+    return result, net_glob
 
 
 if __name__ == '__main__':
-    # parse args
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
-
-    method = 'Noiseless'
-    # method = 'Proposed_SCA'
-    # method = 'Ori_AS'
-    # method = 'Ori_ML'
+    method = args.method
     final_result = Main(args, method)
-
-
+    print(final_result)

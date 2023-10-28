@@ -11,7 +11,7 @@ def args_parser():
     parser.add_argument('--short', type=float, default=0, help="short or long pkt")
     parser.add_argument('--maxDelay', type=float, default=0.9, help="the maximum delay of the devices")
     parser.add_argument('--T_sam', type=float, default=1.0, help="the sample period")
-    parser.add_argument('--EsN0dB', type=float, default=60.0, help="variance of the noise")
+    parser.add_argument('--EsN0dB', type=float, default=20.0, help="variance of the noise")
     parser.add_argument('--epochs', type=int, default=50, help="rounds of training")
     parser.add_argument('--P0', type=int, default=10, help="Maximum transmit power")
     parser.add_argument('--M_Prime', type=int, default=40, help="number of users: M_Prime")
@@ -19,9 +19,9 @@ def args_parser():
     parser.add_argument('--L', type=int, default=260, help="length of one packet: L")
     parser.add_argument('--frac', type=float, default=0.1, help="the fraction of clients: C")
     parser.add_argument('--local_ep', type=int, default=5, help="the number of local epochs: E")
-    parser.add_argument('--local_bs', type=int, default=128, help="local batch size: B, 0 for full-batch")
+    parser.add_argument('--local_bs', type=int, default=0, help="local batch size: B, 0 for full-batch")
     parser.add_argument('--bs', type=int, default=128, help="test batch size")
-    parser.add_argument('--lr', type=float, default=0.01, help="learning rate")  # iid
+    parser.add_argument('--lr', type=float, default=0.1, help="learning rate")  # iid
     parser.add_argument('--momentum', type=float, default=0.5, help="SGD momentum (default: 0.5)")
     parser.add_argument('--split', type=str, default='user', help="train-test split type, user or sample")
     parser.add_argument('--epsilon', type=float, default=1e-2, help="SCA iteration stop condition")
@@ -47,5 +47,7 @@ def args_parser():
     parser.add_argument('--verbose', default=1, action='store_true', help='verbose print')
     parser.add_argument('--seed', type=int, default=1, help='random seed (default: 1)')
     parser.add_argument('--all_clients', action='store_true', help='aggregation over all clients')
+    parser.add_argument('--count', type=int, default=0, help="number of joint optimization failures")
+    parser.add_argument('--method', type=str, default='Proposed_SCA', help="aggregation method")
     args = parser.parse_args()
     return args
